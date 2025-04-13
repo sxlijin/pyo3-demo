@@ -1,0 +1,25 @@
+[package]
+name = "my-rust-crate"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "my_rust_crate"
+crate-type = ["cdylib"]
+
+[dependencies]
+axum = "0.8.3"
+ctrlc = "3.4.6"
+futures = "0.3.31"
+pyo3 = { version = "0.24.1", default-features = false, features = [
+    "extension-module",
+    "abi3-py38",
+    "macros",
+] }
+pyo3-async-runtimes = { version = "0.24.0", features = ["tokio", "tokio-runtime"] }
+serde = { version = "1.0.219", features = ["derive"] }
+tokio = { version = "1.44.2", features = ["full"] }
+tokio-stream = "0.1.17"
+
+[build-dependencies]
+pyo3-build-config = "0.24.1"

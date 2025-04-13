@@ -1,0 +1,17 @@
+[project]
+name = "my-rust-crate"
+version = "0.1.0"
+description = "This is a demo crate"
+readme = "../README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.license]
+file = "../LICENSE"
+
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[tool.maturin]
+features = ["pyo3/extension-module"]

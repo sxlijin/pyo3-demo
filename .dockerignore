@@ -1,0 +1,5 @@
+.venv/
+target/
+target-rust-analyzer/
+__pycache__/
+
