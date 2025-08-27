@@ -9,7 +9,10 @@ crate-type = ["cdylib"]
 
 [dependencies]
 axum = "0.8.3"
+bytes = "1.0"
+chrono = "0.4.41"
 ctrlc = "3.4.6"
+eventsource-stream = "0.2"
 futures = "0.3.31"
 pyo3 = { version = "0.24.1", default-features = false, features = [
     "extension-module",
@@ -17,6 +20,7 @@ pyo3 = { version = "0.24.1", default-features = false, features = [
     "macros",
 ] }
 pyo3-async-runtimes = { version = "0.24.0", features = ["tokio", "tokio-runtime"] }
+reqwest = { version = "0.12", features = ["stream", "json"] }
 serde = { version = "1.0.219", features = ["derive"] }
 tokio = { version = "1.44.2", features = ["full"] }
 tokio-stream = "0.1.17"

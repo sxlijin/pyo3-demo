@@ -36,3 +36,4 @@ target/
 target-rust-analyzer/
 **/*.rs.bk
 pdb/
+.claude/settings.local.json
