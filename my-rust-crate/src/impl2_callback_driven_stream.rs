@@ -1,4 +1,4 @@
-use crate::stream_values;
+use crate::get_http_stream;
 use futures::pin_mut;
 use pyo3::prelude::*;
 use pyo3_async_runtimes::tokio::get_runtime as get_tokio_runtime;
@@ -16,7 +16,7 @@ impl CallbackDrivenStream {
         let callback_ref = callback_ref.clone().unbind();
 
         get_tokio_runtime().spawn(async move {
-            let s = stream_values("https://sse.dev/test");
+            let s = get_http_stream("https://sse.dev/test");
             pin_mut!(s);
 
             while let Some(event) = s.next().await {

@@ -1,4 +1,11 @@
-use crate::stream_values;
+//! Demonstrate different approaches to attempting to build a Python async
+//! iterator in Rust without cloning stuff.
+//!
+//! Couldn't make any of them work: wrapping a `Stream`, wrapping a `Receiver`,
+//! or (not shown) using `StreamExt::into_future`.
+
+use crate::get_http_stream;
+use futures::pin_mut;
 use pyo3::exceptions::PyStopAsyncIteration;
 use pyo3::prelude::*;
 use std::pin::Pin;
@@ -16,7 +23,7 @@ impl NaiveStream {
     #[new]
     fn new() -> Self {
         Self {
-            stream: Box::pin(stream_values("https://sse.dev/test")),
+            stream: Box::pin(get_http_stream("https://sse.dev/test")),
         }
     }
 
@@ -25,14 +32,15 @@ impl NaiveStream {
     }
 
     fn __anext__<'py>(&mut self, py: Python<'py>) -> PyResult<Bound<'py, PyAny>> {
-        pyo3_async_runtimes::tokio::future_into_py(py, async move {
-            let event = self.stream.next().await;
+        unimplemented!()
+        // pyo3_async_runtimes::tokio::future_into_py(py, async move {
+        //     let event = self.stream.next().await;
 
-            match event {
-                Some(s) => Ok(s),
-                None => Err(PyStopAsyncIteration::new_err("Stream ended")),
-            }
-        })
+        //     match event {
+        //         Some(s) => Ok(s),
+        //         None => Err(PyStopAsyncIteration::new_err("Stream ended")),
+        //     }
+        // })
     }
 }
 
@@ -46,7 +54,9 @@ impl NaiveStreamWithArcMutex {
     #[new]
     fn new() -> Self {
         Self {
-            stream: Arc::new(Mutex::new(Box::pin(stream_values("https://sse.dev/test")))),
+            stream: Arc::new(Mutex::new(Box::pin(get_http_stream(
+                "https://sse.dev/test",
+            )))),
         }
     }
 
@@ -79,7 +89,7 @@ impl MpscChannelStream {
         let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
 
         tokio::spawn(async move {
-            let stream = stream_values("https://sse.dev/test");
+            let stream = get_http_stream("https://sse.dev/test");
             pin_mut!(stream);
             while let Some(s) = stream.next().await {
                 tx.send(s).unwrap();
@@ -94,14 +104,15 @@ impl MpscChannelStream {
     }
 
     fn __anext__<'py>(&mut self, py: Python<'py>) -> PyResult<Bound<'py, PyAny>> {
-        pyo3_async_runtimes::tokio::future_into_py(py, async move {
-            let event = self.rx.recv().await;
+        unimplemented!()
+        // pyo3_async_runtimes::tokio::future_into_py(py, async move {
+        //     let event = self.rx.recv().await;
 
-            match event {
-                Some(s) => Ok(s),
-                None => Err(PyStopAsyncIteration::new_err("Stream ended")),
-            }
-        })
+        //     match event {
+        //         Some(s) => Ok(s),
+        //         None => Err(PyStopAsyncIteration::new_err("Stream ended")),
+        //     }
+        // })
     }
 }
 
@@ -117,7 +128,7 @@ impl BroadcastChannelStream {
         let (tx, rx) = tokio::sync::broadcast::channel(100);
 
         tokio::spawn(async move {
-            let stream = stream_values("https://sse.dev/test");
+            let stream = get_http_stream("https://sse.dev/test");
             pin_mut!(stream);
             while let Some(s) = stream.next().await {
                 tx.send(s).unwrap();

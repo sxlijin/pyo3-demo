@@ -2,7 +2,6 @@ mod april_18_srug;
 mod impl1_naive_stream;
 mod impl2_callback_driven_stream;
 mod my_rust_object;
-// mod my_rust_stream4;
 
 use std::time::Duration;
 
@@ -13,7 +12,7 @@ use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
 use tokio_stream::StreamExt as TokioStreamExt;
 
-pub fn stream_values(url: &str) -> impl Stream<Item = String> {
+pub fn get_http_stream(url: &str) -> impl Stream<Item = String> {
     let url = url.to_string();
 
     let s = stream::once(async move {
@@ -53,22 +52,14 @@ pub fn stream_values(url: &str) -> impl Stream<Item = String> {
     futures::StreamExt::flatten(s)
 }
 
-pub fn stream_values2(_url: &'static str) -> impl Stream<Item = String> {
+pub fn hello_world_stream() -> impl Stream<Item = String> {
     stream::repeat_with(|| format!("Hello world! {}", chrono::Local::now()))
         .throttle(Duration::from_secs(1))
 }
 
 #[pymodule]
 fn my_rust_crate(m: Bound<'_, PyModule>) -> PyResult<()> {
-    // m.add_wrapped(wrap_pyfunction!(hello_world));
-    // m.add_wrapped(wrap_pyfunction!(my_ping_server::start_server_via_asyncio))?;
-    // m.add_wrapped(wrap_pyfunction!(sleep_blocking));
-    custom_ctrlc_handler::install_ctrlc_handler();
-    // panic!("Uh-oh - my Rust code has panicked!");
-    m.add_wrapped(wrap_pyfunction!(my_ping_server::start_server_via_tokio))?;
     m.add_class::<my_rust_object::MyRustObject>()?;
-    // m.add_class::<my_rust_stream::MyRustStream>()?;
     m.add_class::<impl2_callback_driven_stream::CallbackDrivenStream>()?;
-    m.add_wrapped(wrap_pyfunction!(blocking_fetch_sse_stream))?;
     Ok(())
 }
