@@ -6,12 +6,12 @@ use std::time::Duration;
 use tokio_stream::StreamExt;
 
 #[pyclass]
-pub struct MyRustStream {
+pub struct MyRustStream4 {
     stream: Pin<Box<dyn futures::Stream<Item = String> + Send + Sync>>,
 }
 
 #[pymethods]
-impl MyRustStream {
+impl MyRustStream4 {
     #[new]
     fn new() -> Self {
         Self {

@@ -1,8 +1,4 @@
 import my_rust_crate
-import time
-import os
-import threading
-import asyncio
 import queue
 
 
@@ -32,8 +28,12 @@ async def async_main():
 
 
 def main():
+    my_rust_crate.blocking_fetch_sse_stream("https://sse.dev/test")
     # Run async code
-    asyncio.run(async_main())
+    # asyncio.run(async_main())
+    o = my_rust_crate.MyRustObject("Hello, world!")
+    print(o)
+    o.print()
 
 
 if __name__ == "__main__":
