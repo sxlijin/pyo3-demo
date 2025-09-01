@@ -1,8 +1,18 @@
 use pyo3::{exceptions::PyRuntimeError, prelude::*};
-use pythonize::depythonize;
 use serde::Deserialize;
 
-const SEED: &str = "Lorem ipsum dolor sit amet.";
+#[pyfunction]
+pub fn make_lorem_ipsum(options: &LoremIpsumOptions) -> PyResult<String> {
+    let mut seed = "Lorem ipsum dolor sit amet.".to_string();
+    if options.crab_emoji {
+        seed.push_str("🦀");
+    }
+    if options.newlines {
+        seed.push_str("\n");
+    }
+
+    Ok(seed.repeat(options.repeat))
+}
 
 #[derive(Clone, Deserialize)]
 #[pyclass]
@@ -27,17 +37,4 @@ impl LoremIpsumOptions {
     pub fn from_json_string(json_string: &str) -> PyResult<Self> {
         serde_json::from_str(json_string).map_err(|e| PyRuntimeError::new_err(e.to_string()))
     }
-}
-
-#[pyfunction]
-pub fn make_lorem_ipsum(options: &LoremIpsumOptions) -> PyResult<String> {
-    let mut seed = SEED.to_string();
-    if options.crab_emoji {
-        seed.push_str("🦀");
-    }
-    if options.newlines {
-        seed.push_str("\n");
-    }
-
-    Ok(seed.repeat(options.repeat))
 }
