@@ -1,23 +1,26 @@
-use crate::get_http_stream;
+use super::stream_impls::get_http_stream;
 use futures::pin_mut;
 use pyo3::prelude::*;
 use pyo3_async_runtimes::tokio::get_runtime as get_tokio_runtime;
+use tokio::task::JoinHandle;
 use tokio_stream::StreamExt;
 
 #[pyclass]
-pub struct CallbackDrivenStream {}
+pub struct CallbackDrivenStream {
+    pub join_handle: JoinHandle<()>,
+}
 
 #[pymethods]
 impl CallbackDrivenStream {
     /// This strategy means that we don't have to create multiple Rust futures
     /// with references to the same `Stream` object!
-    #[staticmethod]
-    fn new<'py>(callback_ref: &Bound<'py, PyAny>) -> PyResult<()> {
+    #[new]
+    fn new<'py>(callback_ref: &Bound<'py, PyAny>, url: String) -> PyResult<Self> {
         let callback_ref = callback_ref.clone().unbind();
 
-        get_tokio_runtime().spawn(async move {
-            let s = get_http_stream("https://sse.dev/test");
-            pin_mut!(s);
+        let join_handle = get_tokio_runtime().spawn(async move {
+            let s = get_http_stream(&url);
+            pin_mut!(s); // async mumbo jumbo
 
             while let Some(event) = s.next().await {
                 Python::with_gil(|py| {
@@ -32,6 +35,6 @@ impl CallbackDrivenStream {
             }
         });
 
-        Ok(())
+        Ok(Self { join_handle })
     }
 }

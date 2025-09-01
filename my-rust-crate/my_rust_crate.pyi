@@ -1,38 +1,24 @@
-def hello_world():
-    """This is a docstring for the hello_world function."""
-    ...
+from typing import Callable
 
-def modify_string(text: str) -> str:
-    """This is a docstring for the modify_string function."""
-    ...
+class LoremIpsumOptions:
+    """A Lorem Ipsum options object."""
 
-class MyRustObject:
-    """A Rust object exposed to Python."""
+    def __init__(self, *, repeat: int, crab_emoji: bool, newlines: bool) -> None:
+        """Creates a LoremIpsumOptions."""
+        ...
+
     @staticmethod
-    def my_static_method(text: str) -> "MyRustObject":
-        """Creates a MyRustObject via a static method."""
+    def from_json_string(json_string: str) -> "LoremIpsumOptions":
+        """Creates a LoremIpsumOptions from a JSON string."""
         ...
 
-    def __init__(self, text: str) -> None:
-        """Creates a MyRustObject via constructor."""
-        ...
-
-    def print(self) -> None:
-        """Prints the object's text."""
-        ...
-
-def start_server_via_tokio(addr: str) -> None:
-    """Starts an HTTP server at the specified address.
-
-    Args:
-        addr: The address to bind to (e.g. '127.0.0.1:8000')
-    """
+def make_lorem_ipsum(options: LoremIpsumOptions) -> str:
+    """Generates a Lorem Ipsum string."""
     ...
 
-async def start_server_via_asyncio(addr: str) -> None:
-    """Starts an HTTP server at the specified address.
+class CallbackDrivenStream:
+    """A callback-driven stream."""
 
-    Args:
-        addr: The address to bind to (e.g. '127.0.0.1:8000')
-    """
-    ...
+    def __init__(self, callback_ref: Callable[[str], None], url: str) -> None:
+        """Creates a CallbackDrivenStream."""
+        ...

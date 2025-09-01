@@ -4,7 +4,7 @@
 //! Couldn't make any of them work: wrapping a `Stream`, wrapping a `Receiver`,
 //! or (not shown) using `StreamExt::into_future`.
 
-use crate::get_http_stream;
+use super::stream_impls::get_http_stream;
 use futures::pin_mut;
 use pyo3::exceptions::PyStopAsyncIteration;
 use pyo3::prelude::*;
