@@ -5,7 +5,7 @@ import queue
 
 async def rust_backed_stream(url: str):
     q = queue.Queue()
-    my_rust_crate.CallbackDrivenStream(q.put_nowait, url)
+    my_rust_crate.callback_driven_stream(url, q.put_nowait)
     while True:
         item = q.get()
         if item is None:

@@ -2,7 +2,7 @@ use pyo3::{exceptions::PyRuntimeError, prelude::*};
 use serde::Deserialize;
 
 #[pyfunction]
-pub fn make_lorem_ipsum(options: &LoremIpsumOptions) -> PyResult<String> {
+pub fn make_lorem_ipsum(options: &RustOptionsObject) -> PyResult<String> {
     let mut seed = "Lorem ipsum dolor sit amet.".to_string();
     if options.crab_emoji {
         seed.push_str("🦀");
@@ -16,14 +16,14 @@ pub fn make_lorem_ipsum(options: &LoremIpsumOptions) -> PyResult<String> {
 
 #[derive(Clone, Deserialize)]
 #[pyclass]
-pub struct LoremIpsumOptions {
+pub struct RustOptionsObject {
     pub repeat: usize,
     pub crab_emoji: bool,
     pub newlines: bool,
 }
 
 #[pymethods]
-impl LoremIpsumOptions {
+impl RustOptionsObject {
     #[new]
     pub fn new(repeat: u32, crab_emoji: bool, newlines: bool) -> Self {
         Self {

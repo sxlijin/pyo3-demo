@@ -1,24 +1,25 @@
 from typing import Callable
 
-class LoremIpsumOptions:
-    """A Lorem Ipsum options object."""
+class RustOptionsObject:
+    """Rust-backed options object for make_lorem_ipsum."""
+
+    repeat: int
+    crab_emoji: bool
+    newlines: bool
 
     def __init__(self, *, repeat: int, crab_emoji: bool, newlines: bool) -> None:
-        """Creates a LoremIpsumOptions."""
+        """Creates a RustOptionsObject."""
         ...
 
     @staticmethod
-    def from_json_string(json_string: str) -> "LoremIpsumOptions":
-        """Creates a LoremIpsumOptions from a JSON string."""
+    def from_json_string(json_string: str) -> "RustOptionsObject":
+        """Creates a RustOptionsObject from a JSON string."""
         ...
 
-def make_lorem_ipsum(options: LoremIpsumOptions) -> str:
-    """Generates a Lorem Ipsum string."""
+def make_lorem_ipsum(options: RustOptionsObject) -> str:
+    """Generates a Lorem Ipsum string using Rust code."""
     ...
 
-class CallbackDrivenStream:
-    """A callback-driven stream."""
-
-    def __init__(self, callback_ref: Callable[[str], None], url: str) -> None:
-        """Creates a CallbackDrivenStream."""
-        ...
+def callback_driven_stream(url: str, callback_ref: Callable[[str], None]) -> None:
+    """Creates a callback-driven stream."""
+    ...
