@@ -2,6 +2,14 @@ use pyo3::{exceptions::PyRuntimeError, prelude::*};
 use serde::Deserialize;
 
 #[pyfunction]
+/// Make a Lorem Ipsum string by converting a pure Python object to a Rust object.
+pub fn make_lorem_ipsum_from_python(options: &Bound<'_, PyAny>) -> PyResult<String> {
+    let options = options.extract()?;
+    make_lorem_ipsum(&options)
+}
+
+#[pyfunction]
+/// Make a Lorem Ipsum string from a Python object implemented in Rust.
 pub fn make_lorem_ipsum(options: &RustOptionsObject) -> PyResult<String> {
     let mut seed = "Lorem ipsum dolor sit amet.".to_string();
     if options.crab_emoji {
@@ -14,7 +22,7 @@ pub fn make_lorem_ipsum(options: &RustOptionsObject) -> PyResult<String> {
     Ok(seed.repeat(options.repeat))
 }
 
-#[derive(Clone, Deserialize)]
+#[derive(Deserialize, FromPyObject)]
 #[pyclass]
 pub struct RustOptionsObject {
     pub repeat: usize,

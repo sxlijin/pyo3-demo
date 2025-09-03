@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Any, Callable
 
 class RustOptionsObject:
     """Rust-backed options object for make_lorem_ipsum."""
@@ -17,6 +17,10 @@ class RustOptionsObject:
         ...
 
 def make_lorem_ipsum(options: RustOptionsObject) -> str:
+    """Generates a Lorem Ipsum string using Rust code."""
+    ...
+
+def make_lorem_ipsum_from_python(options: Any) -> str:
     """Generates a Lorem Ipsum string using Rust code."""
     ...
 

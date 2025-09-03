@@ -1,4 +1,15 @@
-from my_rust_crate import RustOptionsObject, make_lorem_ipsum
+import pydantic
+from my_rust_crate import (
+    RustOptionsObject,
+    make_lorem_ipsum,
+    make_lorem_ipsum_from_python,
+)
+
+
+class PythonOptionsObject(pydantic.BaseModel):
+    repeat: int
+    crab_emoji: bool
+    newlines: bool
 
 
 def main():

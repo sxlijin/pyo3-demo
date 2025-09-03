@@ -27,10 +27,6 @@ impl NaiveStream {
         }
     }
 
-    fn __aiter__(slf: PyRef<'_, Self>) -> PyRef<'_, Self> {
-        slf
-    }
-
     fn __anext__<'py>(&mut self, py: Python<'py>) -> PyResult<Bound<'py, PyAny>> {
         unimplemented!()
         // pyo3_async_runtimes::tokio::future_into_py(py, async move {
@@ -41,6 +37,10 @@ impl NaiveStream {
         //         None => Err(PyStopAsyncIteration::new_err("Stream ended")),
         //     }
         // })
+    }
+
+    fn __aiter__(slf: PyRef<'_, Self>) -> PyRef<'_, Self> {
+        slf
     }
 }
 
